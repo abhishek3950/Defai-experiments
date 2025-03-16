@@ -2,7 +2,8 @@ from time import sleep, time
 from typing import TYPE_CHECKING
 from decimal import Decimal
 
-from src.strategy.models import ActionBundle, RemoveLiquidityUniV3, AddLiquidityUniV3
+from src.almanak_library.models.action_bundle import ActionBundle
+from src.almanak_library.models.action import RemoveLiquidityUniV3, AddLiquidityUniV3
 
 if TYPE_CHECKING:
     from ..strategy import MyStrategy

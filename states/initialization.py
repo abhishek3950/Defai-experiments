@@ -1,7 +1,8 @@
 from time import sleep
 from typing import TYPE_CHECKING
 
-from src.strategy.models import ActionBundle, ApproveToken
+from src.almanak_library.models.action_bundle import ActionBundle
+from src.almanak_library.models.action import ApproveToken
 
 if TYPE_CHECKING:
     from ..strategy import MyStrategy
