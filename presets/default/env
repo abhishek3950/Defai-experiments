@@ -1,0 +1,26 @@
+# Ethereum RPC URL (Base Chain)
+RPC_URL=https://mainnet.base.org
+
+# Your wallet private key (without 0x prefix)
+PRIVATE_KEY=your_private_key_here
+
+# Token Addresses (Base Chain)
+USDC_ADDRESS=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+ETH_ADDRESS=0x4200000000000000000000000000000000000006
+
+# UniswapV3 Router Address (Base Chain)
+UNIV3_ROUTER=0x2626664c2603336E57B271c5C0b26F421741e481
+
+# Strategy Parameters
+PRICE_RANGE_PERCENTAGE=2  # ±2% range for liquidity provision
+REBALANCE_THRESHOLD=1.5   # Rebalance when price moves ±1.5%
+MONITOR_INTERVAL=60       # Check price every 60 seconds
+
+# Gas Settings
+GAS_LIMIT=500000
+MAX_PRIORITY_FEE=2       # Max priority fee in Gwei
+MAX_FEE=100             # Max fee in Gwei
+
+# Advanced Settings
+SLIPPAGE_TOLERANCE=0.5   # 0.5% slippage tolerance
+MIN_USDC_AMOUNT=100     # Minimum USDC amount to start strategy
