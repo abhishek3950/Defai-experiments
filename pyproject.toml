@@ -1,6 +1,6 @@
 [project]
 description = "Single Sided ETH USDC Deposit Strategy on Uniswap V3 for Base Chain"
-name = "Strategy2"
+name = "univ3-eth-single-sided-lp"
 version = "0.0.1"
 authors = [{ name = "SingleSidedETHUSDCUniV3Base" }]
 #readme = "./README.md"
