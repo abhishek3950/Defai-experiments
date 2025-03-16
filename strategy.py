@@ -1,13 +1,15 @@
 import os
 
 from src.almanak_library.models.action_bundle import ActionBundle
-from src.strategy.strategies.tutorial_hello_world.models import (
+from src.almanak_library.models import (
     PersistentState,
     State,
     StrategyConfig,
     SubState,
 )
-from src.strategy.strategy_base import StrategyUniV3
+from src.almanak_library.strategy_base import StrategyUniV3
+from src.almanak_library.protocols.uniswap_v3 import UniswapV3
+from src.utils.utils import get_protocol_sdk, get_web3_by_network_and_chain
 
 from .states.initialization import initialization
 from .states.teardown import teardown
@@ -51,6 +53,11 @@ class MyStrategy(StrategyUniV3):
         self.chain = self.config.chain
         self.network = self.config.network
         self.protocol = self.config.protocol
+        self.pool_address = self.config.pool_address
+
+        # Initialize web3 and protocol SDK
+        self.web3 = get_web3_by_network_and_chain(self.network, self.chain)
+        self.uniswap_v3 = get_protocol_sdk(self.protocol, self.network, self.chain)
 
         self.initialize_persistent_state()
 
@@ -204,3 +211,11 @@ class MyStrategy(StrategyUniV3):
     def get_token_balance(self, token_address: str) -> int:
         """Get the balance of a token for the strategy's wallet address."""
         return self.uniswap_v3.get_token_balance(token_address, self.wallet_address)
+
+    def get_current_eth_price(self) -> float:
+        """Get the current ETH price from the pool."""
+        return self.uniswap_v3.get_pool_spot_rate(self.pool_address)
+
+    def get_active_position_info(self, position_id: int) -> tuple:
+        """Get information about an active liquidity position."""
+        return self.uniswap_v3.get_position_info(position_id)
