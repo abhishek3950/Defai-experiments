@@ -1,0 +1,35 @@
+[project]
+description = "Single Sided ETH USDC Deposit Strategy on Uniswap V3 for Base Chain"
+name = "Strategy2"
+version = "0.0.1"
+authors = [{ name = "SingleSidedETHUSDCUniV3Base" }]
+#readme = "./README.md"
+requires-python = ">=3.11,<3.12"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+# dependencies = [] # Currently use requirements for dependencies
+keywords = ["defi", "uniswap", "base", "strategy"]
+
+[project.urls]
+# Homepage = ""
+# Issues = ""
+
+[tool.scope]
+is_private = true
+
+[tool.metadata]
+human_readable_name = "Single Sided ETH-USDC Deposit on UniV3 Base"
+
+[tool.presets.default]
+title = "Default"
+description = "Default presets for Single Sided ETH-USDC Deposit on Uniswap V3."
+chain = "BASE"
+config = "./presets/default/config.json"
+permissions = "./presets/default/permissions.json"
+env = "./presets/default/env"

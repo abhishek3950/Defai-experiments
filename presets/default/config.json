@@ -1,0 +1,16 @@
+{
+  "strategy_configs": {
+    "UniV3-USDC-ETH-Base": {
+      "strategy_name": "MyStrategy",
+      "parameters": {
+        "network": "BASE",
+        "chain": "BASE",
+        "protocol": "UNISWAP_V3",
+        "pool": "USDC-ETH",
+        "type": "CONCENTRATED_LIQUIDITY",
+        "initiate_teardown": false,
+        "pause_strategy": false
+      }
+    }
+  }
+}

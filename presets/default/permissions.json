@@ -1,0 +1,33 @@
+[
+  {
+    "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+    "clearance": 1,
+    "executionOptions": 0,
+    "functions": []
+  },
+  {
+    "address": "0x4200000000000000000000000000000000000006",
+    "clearance": 2,
+    "executionOptions": 0,
+    "functions": [
+      {
+        "selector": "0x095ea7b3",
+        "executionOptions": 0,
+        "wildcarded": false,
+        "condition": {
+          "$$id": "0x00a500300000000000000000000000002626664c2603336e57b271c5c0b26f421741e481",
+          "paramType": 5,
+          "operator": 5,
+          "children": [
+            {
+              "$$id": "0x00300000000000000000000000002626664c2603336e57b271c5c0b26f421741e481",
+              "paramType": 1,
+              "operator": 16,
+              "compValue": "0x0000000000000000000000002626664c2603336e57b271c5c0b26f421741e481"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]
