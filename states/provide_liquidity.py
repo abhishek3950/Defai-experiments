@@ -3,7 +3,8 @@ from typing import TYPE_CHECKING
 from decimal import Decimal
 
 from src.almanak_library.models.action_bundle import ActionBundle
-from src.almanak_library.models.action import AddLiquidityUniV3
+from src.almanak_library.models.action import OpenPositionParams, Action
+from src.almanak_library.enums import ActionType, Protocol
 
 if TYPE_CHECKING:
     from ..strategy import MyStrategy
@@ -37,13 +38,22 @@ def provide_liquidity(strategy: "MyStrategy") -> ActionBundle:
     lower_price = current_price * (Decimal('1') - PRICE_RANGE_MULTIPLIER)
     upper_price = current_price * (Decimal('1') + PRICE_RANGE_MULTIPLIER)
     
-    add_liquidity_action = AddLiquidityUniV3(
+    open_position_params = OpenPositionParams(
         token0=ETH_ADDRESS,
         token1=USDC_ADDRESS,
-        amount0=eth_balance,
-        amount1=usdc_balance,
-        lower_price=lower_price,
-        upper_price=upper_price
+        fee=500,  # 0.05% fee tier
+        price_lower=float(lower_price),
+        price_upper=float(upper_price),
+        amount0_desired=eth_balance,
+        amount1_desired=usdc_balance,
+        recipient=strategy.wallet_address,
+        slippage=0.005  # 0.5% slippage
+    )
+    
+    add_liquidity_action = Action(
+        type=ActionType.OPEN_LP_POSITION,
+        params=open_position_params,
+        protocol=Protocol.UNISWAP_V3
     )
     
     return ActionBundle(actions=[add_liquidity_action])

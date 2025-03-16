@@ -2,7 +2,8 @@ from time import sleep
 from typing import TYPE_CHECKING
 
 from src.almanak_library.models.action_bundle import ActionBundle
-from src.almanak_library.models.action import ApproveToken
+from src.almanak_library.models.action import ApproveParams, Action
+from src.almanak_library.enums import ActionType, Protocol
 
 if TYPE_CHECKING:
     from ..strategy import MyStrategy
@@ -40,10 +41,17 @@ def initialization(strategy: "MyStrategy") -> ActionBundle:
     strategy.persistent_state.price_history = []
     
     # Create approval action for USDC
-    approve_action = ApproveToken(
+    approve_params = ApproveParams(
         token_address=USDC_ADDRESS,
-        spender=UNIV3_ROUTER,
+        spender_address=UNIV3_ROUTER,
+        from_address=strategy.wallet_address,
         amount=usdc_balance
+    )
+    
+    approve_action = Action(
+        type=ActionType.APPROVE,
+        params=approve_params,
+        protocol=Protocol.UNISWAP_V3
     )
     
     return ActionBundle(actions=[approve_action])

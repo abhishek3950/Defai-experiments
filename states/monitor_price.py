@@ -2,7 +2,7 @@ from time import sleep, time
 from typing import TYPE_CHECKING
 from decimal import Decimal
 
-from src.almanak_library.models.action_bundle import ActionBundle
+from src.strategy.models import ActionBundle
 
 if TYPE_CHECKING:
     from ..strategy import MyStrategy

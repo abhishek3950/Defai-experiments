@@ -2,7 +2,8 @@ from time import sleep
 from typing import TYPE_CHECKING
 
 from src.almanak_library.models.action_bundle import ActionBundle
-from src.almanak_library.models.action import SwapUniV3
+from src.almanak_library.models.action import SwapParams, Action
+from src.almanak_library.enums import ActionType, Protocol, SwapSide
 
 if TYPE_CHECKING:
     from ..strategy import MyStrategy
@@ -29,11 +30,20 @@ def swap_usdc_to_eth(strategy: "MyStrategy") -> ActionBundle:
     usdc_balance = strategy.get_token_balance(USDC_ADDRESS)
     amount_to_swap = usdc_balance // 2  # Swap half the balance
     
-    swap_action = SwapUniV3(
-        token_in=USDC_ADDRESS,
-        token_out=ETH_ADDRESS,
-        amount_in=amount_to_swap,
-        min_amount_out=0  # You might want to add slippage protection here
+    swap_params = SwapParams(
+        side=SwapSide.SELL,
+        tokenIn=USDC_ADDRESS,
+        tokenOut=ETH_ADDRESS,
+        fee=500,  # 0.05% fee tier
+        recipient=strategy.wallet_address,
+        amount=amount_to_swap,
+        slippage=0.005  # 0.5% slippage
+    )
+    
+    swap_action = Action(
+        type=ActionType.SWAP,
+        params=swap_params,
+        protocol=Protocol.UNISWAP_V3
     )
     
     return ActionBundle(actions=[swap_action])

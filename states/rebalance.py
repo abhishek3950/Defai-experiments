@@ -3,7 +3,8 @@ from typing import TYPE_CHECKING
 from decimal import Decimal
 
 from src.almanak_library.models.action_bundle import ActionBundle
-from src.almanak_library.models.action import RemoveLiquidityUniV3, AddLiquidityUniV3
+from src.almanak_library.models.action import ClosePositionParams, OpenPositionParams, Action
+from src.almanak_library.enums import ActionType, Protocol
 
 if TYPE_CHECKING:
     from ..strategy import MyStrategy
@@ -25,9 +26,18 @@ def rebalance(strategy: "MyStrategy") -> ActionBundle:
     PRICE_RANGE_MULTIPLIER = Decimal('0.02')  # 2% range
     
     # First, remove existing liquidity
-    remove_liquidity_action = RemoveLiquidityUniV3(
+    close_params = ClosePositionParams(
         position_id=strategy.persistent_state.eth_usdc_position_id,
-        amount_percentage=100  # Remove all liquidity
+        recipient=strategy.wallet_address,
+        token0=ETH_ADDRESS,
+        token1=USDC_ADDRESS,
+        slippage=0.005  # 0.5% slippage
+    )
+    
+    remove_liquidity_action = Action(
+        type=ActionType.CLOSE_LP_POSITION,
+        params=close_params,
+        protocol=Protocol.UNISWAP_V3
     )
     
     # Get current price and calculate new range
@@ -40,13 +50,22 @@ def rebalance(strategy: "MyStrategy") -> ActionBundle:
     usdc_balance = strategy.get_token_balance(USDC_ADDRESS)
     
     # Create new position
-    add_liquidity_action = AddLiquidityUniV3(
+    open_position_params = OpenPositionParams(
         token0=ETH_ADDRESS,
         token1=USDC_ADDRESS,
-        amount0=eth_balance,
-        amount1=usdc_balance,
-        lower_price=lower_price,
-        upper_price=upper_price
+        fee=500,  # 0.05% fee tier
+        price_lower=float(lower_price),
+        price_upper=float(upper_price),
+        amount0_desired=eth_balance,
+        amount1_desired=usdc_balance,
+        recipient=strategy.wallet_address,
+        slippage=0.005  # 0.5% slippage
+    )
+    
+    add_liquidity_action = Action(
+        type=ActionType.OPEN_LP_POSITION,
+        params=open_position_params,
+        protocol=Protocol.UNISWAP_V3
     )
     
     # Update state
