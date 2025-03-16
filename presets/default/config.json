@@ -1,15 +1,31 @@
 {
   "strategy_configs": {
     "UniV3-USDC-ETH-Base": {
-      "strategy_name": "MyStrategy",
+      "strategy_name": "Single_Sided_ETH_USDC_UniV3_Base",
       "parameters": {
-        "network": "BASE",
+        "network": "MAINNET",
         "chain": "BASE",
         "protocol": "UNISWAP_V3",
         "pool": "USDC-ETH",
         "type": "CONCENTRATED_LIQUIDITY",
+        "cosigner": {
+          "name": "NONE"
+        },
+        "data_source": "COINGECKO_DEX",
+        "max_sadflow_retries": 3,
+        "max_not_included_retries": 5,
         "initiate_teardown": false,
-        "pause_strategy": false
+        "pause_strategy": false,
+        "pool_address": "0xf0e2c47d4c9fbb3be249a88a18f75b7c2914f70f",
+        "rebalance_interval": 3600,
+        "granularity": "15m",
+        "time_window": 96,
+        "initialization": {
+          "initial_token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "initial_amount_usdc": "1000000000",
+          "fee_tier": 500
+        },
+        "message": "Single-sided ETH liquidity provision on Uniswap V3 Base"
       }
     }
   }

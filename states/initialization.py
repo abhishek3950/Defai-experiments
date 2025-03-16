@@ -1,15 +1,16 @@
 from time import sleep
 from typing import TYPE_CHECKING
 
-from src.almanak_library.models.action_bundle import ActionBundle
-from src.almanak_library.models.action import ApproveParams, Action
 from src.almanak_library.enums import ActionType, Protocol
+from src.almanak_library.models.action import Action
+from src.almanak_library.models.params import ApproveParams
+from src.almanak_library.models.action_bundle import ActionBundle
 
 if TYPE_CHECKING:
-    from ..strategy import MyStrategy
+    from ..strategy import StrategyUniV3SingleSidedETH
 
 
-def initialization(strategy: "MyStrategy") -> ActionBundle:
+def initialization(strategy: "StrategyUniV3SingleSidedETH") -> ActionBundle:
     """
     Initializes the strategy by checking USDC balance and setting up approvals.
     

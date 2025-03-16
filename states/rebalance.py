@@ -3,13 +3,14 @@ from typing import TYPE_CHECKING
 from decimal import Decimal
 
 from src.almanak_library.models.action_bundle import ActionBundle
-from src.almanak_library.models.action import ClosePositionParams, OpenPositionParams, Action
+from src.almanak_library.models.action import Action
+from src.almanak_library.models.params import ClosePositionParams, OpenPositionParams
 from src.almanak_library.enums import ActionType, Protocol
 
 if TYPE_CHECKING:
-    from ..strategy import MyStrategy
+    from ..strategy import StrategyUniV3SingleSidedETH
 
-def rebalance(strategy: "MyStrategy") -> ActionBundle:
+def rebalance(strategy: "StrategyUniV3SingleSidedETH") -> ActionBundle:
     """
     Rebalances the position by:
     1. Removing current liquidity

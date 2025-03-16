@@ -2,14 +2,15 @@ from time import sleep
 from typing import TYPE_CHECKING
 
 from src.almanak_library.models.action_bundle import ActionBundle
-from src.almanak_library.models.action import ClosePositionParams, Action
+from src.almanak_library.models.action import Action
+from src.almanak_library.models.params import ClosePositionParams
 from src.almanak_library.enums import ActionType, Protocol
 
 if TYPE_CHECKING:
-    from ..strategy import MyStrategy
+    from ..strategy import StrategyUniV3SingleSidedETH
 
 
-def teardown(strategy: "MyStrategy") -> ActionBundle:
+def teardown(strategy: "StrategyUniV3SingleSidedETH") -> ActionBundle:
     """
     Concludes the strategy by removing liquidity from Uniswap V3 pool.
     

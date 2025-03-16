@@ -3,13 +3,14 @@ from typing import TYPE_CHECKING
 from decimal import Decimal
 
 from src.almanak_library.models.action_bundle import ActionBundle
-from src.almanak_library.models.action import OpenPositionParams, Action
+from src.almanak_library.models.action import Action
+from src.almanak_library.models.params import OpenPositionParams
 from src.almanak_library.enums import ActionType, Protocol
 
 if TYPE_CHECKING:
-    from ..strategy import MyStrategy
+    from ..strategy import StrategyUniV3SingleSidedETH
 
-def provide_liquidity(strategy: "MyStrategy") -> ActionBundle:
+def provide_liquidity(strategy: "StrategyUniV3SingleSidedETH") -> ActionBundle:
     """
     Provides liquidity to Uniswap V3 ETH-USDC pool with ±2% price range.
     

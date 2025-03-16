@@ -22,6 +22,10 @@ class MyStrategy(StrategyUniV3):
     PRICE_DEVIATION_THRESHOLD = 0.02  # 2% threshold for immediate rebalance
     MIN_PRICE_DEVIATION = 0.005      # 0.5% minimum deviation for hourly rebalance
     REBALANCE_INTERVAL = 3600        # 1 hour in seconds
+    
+    # Token addresses
+    USDC_ADDRESS = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+    ETH_ADDRESS = "0x4200000000000000000000000000000006"
 
     def __init__(self, **kwargs):
         """
@@ -190,3 +194,13 @@ class MyStrategy(StrategyUniV3):
     def log_strategy_balance_metrics(self, action_id: str):
         """Logs strategy balance metrics per action. It is called in the StrategyBase class."""
         pass
+
+    def get_usdc_balance(self) -> int:
+        return self.get_token_balance(self.USDC_ADDRESS)
+
+    def get_eth_balance(self) -> int:
+        return self.get_token_balance(self.ETH_ADDRESS)
+
+    def get_token_balance(self, token_address: str) -> int:
+        """Get the balance of a token for the strategy's wallet address."""
+        return self.uniswap_v3.get_token_balance(token_address, self.wallet_address)

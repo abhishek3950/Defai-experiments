@@ -2,13 +2,14 @@ from time import sleep
 from typing import TYPE_CHECKING
 
 from src.almanak_library.models.action_bundle import ActionBundle
-from src.almanak_library.models.action import SwapParams, Action
-from src.almanak_library.enums import ActionType, Protocol, SwapSide
+from src.almanak_library.models.action import Action
+from src.almanak_library.models.params import SwapParams
+from src.almanak_library.enums import ActionType, Protocol, SwapSide, ExecutionStatus
 
 if TYPE_CHECKING:
-    from ..strategy import MyStrategy
+    from ..strategy import StrategyUniV3SingleSidedETH
 
-def swap_usdc_to_eth(strategy: "MyStrategy") -> ActionBundle:
+def swap_usdc_to_eth(strategy: "StrategyUniV3SingleSidedETH") -> ActionBundle:
     """
     Swaps half of USDC balance to ETH for providing liquidity.
     
@@ -47,3 +48,48 @@ def swap_usdc_to_eth(strategy: "MyStrategy") -> ActionBundle:
     )
     
     return ActionBundle(actions=[swap_action])
+
+def validate_swap_usdc_to_eth(strategy: "StrategyUniV3SingleSidedETH") -> bool:
+    """
+    Validates the swap execution and checks the results.
+    """
+    actions = strategy.executioner_status["actions"]
+    
+    # Check overall status
+    if actions.status != ExecutionStatus.SUCCESS:
+        raise ValueError(f"Validation failed: Expected SUCCESS, Received: {actions.status}")
+    
+    # Find the swap action
+    swap_actions = [action for action in actions.actions if action.type == ActionType.SWAP]
+    if len(swap_actions) != 1:
+        raise ValueError(f"Expected 1 swap action, received: {len(swap_actions)}")
+    
+    # Get execution details
+    swap_executed = swap_actions[0].get_execution_details()
+    if not swap_executed:
+        raise ValueError("No receipt found for swap")
+        
+    # Verify tokens
+    if swap_executed.tokenIn_symbol.lower() != "usdc" or swap_executed.tokenOut_symbol.lower() != "weth":
+        raise ValueError("Swap executed for wrong tokens")
+        
+    print(f"Swap validated successfully: {swap_executed.amountIn} USDC -> {swap_executed.amountOut} ETH")
+    return True
+
+def sadflow_swap_usdc_to_eth(strategy: "StrategyUniV3SingleSidedETH") -> ActionBundle:
+    """
+    Handles failed swap transactions by retrying with updated parameters.
+    """
+    actions = strategy.executioner_status["actions"]
+    match actions.status:
+        case ExecutionStatus.FAILED | ExecutionStatus.CANCELLED | ExecutionStatus.NOT_INCLUDED:
+            print("Swap failed, retrying with updated parameters...")
+            # Increase slippage for retry
+            strategy.persistent_state.retry_count = strategy.persistent_state.retry_count + 1
+            if strategy.persistent_state.retry_count > 3:
+                raise ValueError("Max retry attempts reached")
+            return swap_usdc_to_eth(strategy)
+        case ExecutionStatus.SUCCESS:
+            raise ValueError("Sadflow called with SUCCESS status")
+        case _:
+            raise ValueError(f"Invalid status: {actions.status}")
